@@ -1,6 +1,5 @@
 %% imadjust3
-% IMADJUST3 Adjust image intensity values for N-D images (supports
-% gpuArray).
+% IMADJUST3 Adjust image intensity values for N-D images (supports gpuArray)
 %% Syntax
 %   J = IMADJUST3(I)
 %   J = IMADJUST3(I, PERCENT)
@@ -24,7 +23,7 @@
 % J = IMADJUST3(I, INLEVEL, [LOW_OUT; HIGH_OUT]) maps the
 % values in intensity image I to new values in J such that values between
 % boundaries map to values between LOW_OUT and HIGH_OUT. INLEVEL can be a
-% percentage as described above or a vector with [LOW_IN; HIGH_IN]s
+% percentage as described above or a vector with [LOW_IN; HIGH_IN]
 % supplied directly. Values below LOW_IN and above HIGH_IN are clipped
 % that is, values below LOW_IN map to LOW_OUT, and those above HIGH_IN
 % map to HIGH_OUT. You can use an empty matrix ([]) for [LOW_IN; HIGH_IN]
@@ -89,7 +88,7 @@ montage(volAdj, 'Indices', 1:5, 'Size', [1, 5]);
 title('0.1% of voxels saturated')
 
 %%
-% Adjust Contrast of a N-D Grayscale Image Specyfying Contrast Limits
+% Adjust Contrast of a N-D Grayscale Image specifying Contrast Limits
 % Read a low-contrast 4-D grayscale image into the workspace and display
 % a montage of it.
 
@@ -98,14 +97,14 @@ montage(vol.D, 'Indices', 1:5, 'Size', [1, 5]);
 title('Original image volume');
 
 %%
-% Adjust the contrast of  the image, specyfying contrast limits
+% Adjust the contrast of  the image, specifying contrast limits
 
 volAdj = imadjust3(vol.D, [0.3 0.7]);
 montage(volAdj, 'Indices', 1:5, 'Size', [1, 5]);
 title('Specified contrast limits [0.3 0.7]')
 
 %%
-% Adjust Contrast of a N-D Grayscale Image Specyfying non-linear Gamma
+% Adjust Contrast of a N-D Grayscale Image specifying non-linear Gamma
 % Read a low-contrast 4-D grayscale image into the workspace and display
 % a montage of it.
 
@@ -114,7 +113,7 @@ montage(vol.D, 'Indices', 1:5, 'Size', [1, 5]);
 title('Original image volume');
 
 %%
-% Adjust the contrast of  the image, specyfying a gamma value
+% Adjust the contrast of  the image, specifying a gamma value
 
 volAdj = imadjust3(vol.D, [], [], 0.5);
 montage(volAdj, 'Indices', 1:5, 'Size', [1, 5]);
@@ -153,7 +152,7 @@ title('1% of voxels saturated, computed on the GPU')
 %%
 % <html>
 % <table>
-%   <tr><td><b>INLEVEL -- PERCENT or [LOW_IN, HIGH_IN] Contrast
+%   <tr><td><b>INLEVEL -- PERCENT or [LOW_IN, HIGH_IN] - Contrast
 %   limits</b></td></tr>
 %   <tr><td>0.01 (Default) | scalar between 0 and 1 | [0 1] (Default for
 %   empty entry) | two-element numeric vector with values between 0 and

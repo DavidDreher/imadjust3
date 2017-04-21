@@ -1,6 +1,8 @@
 function [ img ] = imadjust3( img, inLevels, outLevels, gamma, useSingle)
-%IMADJUST3 Adjust image intensity values for N-D images (supports
-%gpuArray).
+%IMADJUST3 Adjust image intensity values for N-D images (supports gpuArray)
+%
+%% HTML help: <a href="matlab:web('html/imadjust3.html')">imadjust3</a>.
+%
 %% Syntax
 %   J = IMADJUST3(I)
 %   J = IMADJUST3(I, PERCENT)
@@ -24,7 +26,7 @@ function [ img ] = imadjust3( img, inLevels, outLevels, gamma, useSingle)
 %   J = IMADJUST3(I, INLEVEL, [LOW_OUT; HIGH_OUT]) maps the
 %   values in intensity image I to new values in J such that values between
 %   boundaries map to values between LOW_OUT and HIGH_OUT. INLEVEL can be a
-%   percentage as described above or a vector with [LOW_IN; HIGH_IN]s
+%   percentage as described above or a vector with [LOW_IN; HIGH_IN]
 %   supplied directly. Values below LOW_IN and above HIGH_IN are clipped
 %   that is, values below LOW_IN map to LOW_OUT, and those above HIGH_IN
 %   map to HIGH_OUT. You can use an empty matrix ([]) for [LOW_IN; HIGH_IN]
@@ -85,7 +87,7 @@ function [ img ] = imadjust3( img, inLevels, outLevels, gamma, useSingle)
 %       montage(volAdj);
 %       title('0.1% of voxels saturated')
 % 
-%   Adjust Contrast of a N-D Grayscale Image Specyfying Contrast Limits
+%   Adjust Contrast of a N-D Grayscale Image Specifying Contrast Limits
 %   Read a low-contrast 4-D grayscale image into the workspace and display
 %   a montage of it.
 %       vol = load('mri');
@@ -93,13 +95,13 @@ function [ img ] = imadjust3( img, inLevels, outLevels, gamma, useSingle)
 %       subplot(1,2,1);
 %       montage(vol.D);
 %       title('Original image volume');
-%   Adjust the contrast of  the image, specyfying contrast limits
+%   Adjust the contrast of  the image, specifying contrast limits
 %       volAdj = imadjust3(vol.D, [0.3 0.7]);
 %       subplot(1,2,2);
 %       montage(volAdj);
-%       title('Specyfied contrast limits [0.3 0.7]')
+%       title('Specified contrast limits [0.3 0.7]')
 %   
-%   Adjust Contrast of a N-D Grayscale Image Specyfying non-linear Gamma
+%   Adjust Contrast of a N-D Grayscale Image Specifying non-linear Gamma
 %   Read a low-contrast 4-D grayscale image into the workspace and display
 %   a montage of it.
 %       vol = load('mri');
@@ -107,11 +109,11 @@ function [ img ] = imadjust3( img, inLevels, outLevels, gamma, useSingle)
 %       subplot(1,2,1);
 %       montage(vol.D);
 %       title('Original image volume');
-%   Adjust the contrast of  the image, specyfying a gamma value
+%   Adjust the contrast of  the image, specifying a gamma value
 %       volAdj = imadjust3(vol.D, [], [], 0.5);
 %       subplot(1,2,2);
 %       montage(volAdj);
-%       title('Specyfied gamma of 0.5')
+%       title('Specified gamma of 0.5')
 %
 %   Adjust Contrast of a N-D Grayscale Image
 %   Read a low-contrast 4-D grayscale image into a gpuArray and display
@@ -134,7 +136,7 @@ function [ img ] = imadjust3( img, inLevels, outLevels, gamma, useSingle)
 %       grayscale N-D image
 %       Data Types: single | double | int16 | uint8 | uint16 | uint32 |
 %       gpuArray (with the previous underlying data types)
-%   INLEVEL -- PERCENT or [LOW_IN, HIGH_IN] Contrast limits
+%   INLEVEL -- PERCENT or [LOW_IN, HIGH_IN] - Contrast limits
 %       0.01 (Default) | scalar between 0 and 1 | [0 1] (Default for empty
 %       entry) | two-element numeric vector with values between 0 and 1
 %       Contrast limits either as a percentage of pixels to be saturated or
@@ -207,7 +209,8 @@ if isempty(inLevels)
 end
 
 % Check input validitiy
-validateattributes(img,{'numeric', 'gpuArray'}, {'nonempty', 'nonsparse'}, ...
+validImClasses = {'single', 'double', 'uint8', 'uint16', 'int16'};
+validateattributes(img,{validImClasses{:}, 'gpuArray'}, {'nonempty', 'nonsparse'}, ...
     mfilename, 'Image', 1);
 validateattributes(inLevels, {'double'}, {'vector', '>=', 0, '<=', 1}, ...
     mfilename, 'In levels', 2);
@@ -227,6 +230,10 @@ end
 imClass = class(img);
 if strcmpi(imClass, 'gpuArray')
     imClass = classUnderlying(img);
+    if ~any(strcmp(imClass, validImClasses))
+        error('imadjust3:I', ['gpuArray I must have a underlying class of: ', ...
+            join(validImClasses, ', ')]);
+    end
 end
 
 % Check image data type and in case of integer convert to double or single
